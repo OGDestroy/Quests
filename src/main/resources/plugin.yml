@@ -1,0 +1,12 @@
+name: Quests
+version: '${project.version}'
+main: me.destroy.quests.Quests
+api-version: 1.19
+authors: [ OG_Destroy ]
+description: Quests Plugin
+commands:
+  QuestOptions:
+    usage: /<command>
+    permission: 'op'
+  Quests:
+    usage: /<command>
