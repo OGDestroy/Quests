@@ -156,39 +156,33 @@ public class QuestHandler implements Listener {
                     if(locationsEasy().contains(loc))return;
                     UUID id = spawnVillagerEasy(loc);
                     newLoc.getBlock().setType(Material.OBSIDIAN);
-                    int length = 0;
-                    ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Easy");
-                    if(section != null) {
-                        length = section.getKeys(false).size();
-                    }
-                    Quests.plugin.getConfig().set("Locations.Easy." + length,loc);
-                    Quests.plugin.getConfig().set("Villagers.Easy." + length,id.toString());
+
+                    Quests.plugin.getConfig().set("Locations.Easy." + id,loc);
+                    List<String> villagerEasy =  Quests.plugin.getConfig().getStringList("Villagers.Easy");
+                    villagerEasy.add(id.toString());
+                    Quests.plugin.getConfig().set("Villagers.Easy",villagerEasy);
                     Quests.plugin.saveConfig();
                 }
                 if(item.getItemMeta().getLore().contains(ChatColor.LIGHT_PURPLE + "- Medium")){
                     if(locationsMedium().contains(loc))return;
                     UUID id = spawnVillagerMedium(loc);
                     newLoc.getBlock().setType(Material.OBSIDIAN);
-                    int length = 0;
-                    ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Medium");
-                    if(section != null) {
-                        length = section.getKeys(false).size();
-                    }
-                    Quests.plugin.getConfig().set("Locations.Medium." + length,loc);
-                    Quests.plugin.getConfig().set("Villagers.Medium." + length,id.toString());
+
+                    Quests.plugin.getConfig().set("Locations.Medium." + id,loc);
+                    List<String> villagerEasy =  Quests.plugin.getConfig().getStringList("Villagers.Medium");
+                    villagerEasy.add(id.toString());
+                    Quests.plugin.getConfig().set("Villagers.Medium",villagerEasy);
                     Quests.plugin.saveConfig();
                 }
                 if(item.getItemMeta().getLore().contains(ChatColor.LIGHT_PURPLE + "- Hard")){
                     if(locationsHard().contains(loc))return;
                     UUID id = spawnVillagerHard(loc);
                     newLoc.getBlock().setType(Material.OBSIDIAN);
-                    int length = 0;
-                    ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Hard");
-                    if(section != null) {
-                        length = section.getKeys(false).size();
-                    }
-                    Quests.plugin.getConfig().set("Locations.Hard." + length,loc);
-                    Quests.plugin.getConfig().set("Villagers.Hard." + length,id.toString());
+
+                    Quests.plugin.getConfig().set("Locations.Hard." + id,loc);
+                    List<String> villagerEasy =  Quests.plugin.getConfig().getStringList("Villagers.Hard");
+                    villagerEasy.add(id.toString());
+                    Quests.plugin.getConfig().set("Villagers.Hard",villagerEasy);
                     Quests.plugin.saveConfig();
                 }
 
@@ -269,55 +263,29 @@ public class QuestHandler implements Listener {
     public void onDeath(EntityDeathEvent e){
         LivingEntity entity = e.getEntity();
         if(entity.getKiller() == null)return;
+        UUID id = entity.getUniqueId();
         if(entity.isCustomNameVisible() && entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase(ChatColor.GREEN + "Quests Cleric Easy")){
-            ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Villagers.Easy");
-            if(section != null) {
-                for (int i = 0; i < section.getKeys(false).size(); i++) {
-                    String uuidS = Quests.plugin.getConfig().getString("Villagers.Easy." + i);
-                    if(uuidS != null) {
-                        UUID uuid = UUID.fromString(uuidS);
-                        if(entity.getUniqueId().equals(uuid)) {
-                            Quests.plugin.getConfig().set("Villagers.Easy." + i, null);
-                            Quests.plugin.getConfig().set("Locations.Easy." + i, null);
-                            Quests.plugin.saveConfig();
-                        }
-                    }
-                }
-            }
+            Quests.plugin.getConfig().set("Locations.Easy." + id,null);
+            List<String> easy = Quests.plugin.getConfig().getStringList("Villagers.Easy");
+            easy.remove(id.toString());
+            Quests.plugin.getConfig().set("Villagers.Easy",easy);
+            Quests.plugin.saveConfig();
             return;
         }
         if(entity.isCustomNameVisible() && entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase(ChatColor.YELLOW + "Quests Cleric Medium")){
-            ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Medium");
-            if(section != null) {
-                for (int i = 0; i < section.getKeys(false).size(); i++) {
-                    String uuidS = Quests.plugin.getConfig().getString("Villagers.Medium." + i);
-                    if(uuidS != null) {
-                        UUID uuid = UUID.fromString(uuidS);
-                        if(entity.getUniqueId().equals(uuid)) {
-                            Quests.plugin.getConfig().set("Villagers.Medium." + i, null);
-                            Quests.plugin.getConfig().set("Locations.Medium." + i, null);
-                            Quests.plugin.saveConfig();
-                        }
-                    }
-                }
-            }
+            Quests.plugin.getConfig().set("Locations.Medium." + id,null);
+            List<String> easy = Quests.plugin.getConfig().getStringList("Villagers.Medium");
+            easy.remove(id.toString());
+            Quests.plugin.getConfig().set("Villagers.Medium",easy);
+            Quests.plugin.saveConfig();
             return;
         }
         if(entity.isCustomNameVisible() && entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase(ChatColor.RED + "Quests Cleric Hard")){
-            ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Hard");
-            if(section != null) {
-                for (int i = 0; i < section.getKeys(false).size(); i++) {
-                    String uuidS = Quests.plugin.getConfig().getString("Villagers.Hard." + i);
-                    if(uuidS != null) {
-                        UUID uuid = UUID.fromString(uuidS);
-                        if(entity.getUniqueId().equals(uuid)) {
-                            Quests.plugin.getConfig().set("Villagers.Hard." + i, null);
-                            Quests.plugin.getConfig().set("Locations.Hard." + i, null);
-                            Quests.plugin.saveConfig();
-                        }
-                    }
-                }
-            }
+            Quests.plugin.getConfig().set("Locations.Hard." + id,null);
+            List<String> easy = Quests.plugin.getConfig().getStringList("Villagers.Hard");
+            easy.remove(id.toString());
+            Quests.plugin.getConfig().set("Villagers.Hard",easy);
+            Quests.plugin.saveConfig();
         }
     }
 
@@ -420,7 +388,7 @@ public class QuestHandler implements Listener {
                 Location loc = e.getItemDrop().getLocation();
 
                 for(Location locList: finalLocations){
-                    if (locList.distance(loc) <= 1.25) {
+                    if (locList != null && locList.getWorld().getName().equals(loc.getWorld().getName()) && locList.distance(loc) <= 1.25) {
                         if (finalShulkerBox != null) {
                             if (finalQuestMaxAmount == 0) {
                                 e.getPlayer().sendActionBar(Component.text(ChatColor.RED + "You must pick a difficulty level first"));
@@ -579,38 +547,33 @@ public class QuestHandler implements Listener {
 
     public List<Location> locationsEasy(){
         List<Location> list = new ArrayList<>();
-        int length = 0;
         ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Easy");
         if(section != null) {
-            length = section.getKeys(false).size();
-        }
-        for(int i = 0;i<length;i++) {
-            list.add(Quests.plugin.getConfig().getLocation("Locations.Easy." + i));
+            for(String key:section.getKeys(false)) {
+                list.add(Quests.plugin.getConfig().getLocation("Locations.Easy." + key));
+            }
         }
         return list;
     }
     public List<Location> locationsMedium(){
         List<Location> list = new ArrayList<>();
-        int length = 0;
         ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Medium");
         if(section != null) {
-            length = section.getKeys(false).size();
-        }
-        for(int i = 0;i<length;i++) {
-            list.add(Quests.plugin.getConfig().getLocation("Locations.Medium." + i));
+            for(String key:section.getKeys(false)) {
+                list.add(Quests.plugin.getConfig().getLocation("Locations.Medium." + key));
+            }
         }
         return list;
     }
     public List<Location> locationsHard(){
         List<Location> list = new ArrayList<>();
-        int length = 0;
         ConfigurationSection section =  Quests.plugin.getConfig().getConfigurationSection("Locations.Hard");
         if(section != null) {
-            length = section.getKeys(false).size();
+            for(String key:section.getKeys(false)) {
+                list.add(Quests.plugin.getConfig().getLocation("Locations.Hard." + key));
+            }
         }
-        for(int i = 0;i<length;i++) {
-            list.add(Quests.plugin.getConfig().getLocation("Locations.Hard." + i));
-        }
+
         return list;
     }
     public static void fireworks(Location loc){
